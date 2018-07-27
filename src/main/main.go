@@ -102,6 +102,9 @@ mnkPIAou1Z5jJh5VkpTYghdae9C8x49OhgQ=
 }
 type msg struct{
 	Token string `json:"token"`
+	Source string `json:source`
+	ArenaId string `json:arena_id`
+	BattleId string `json:battle_id`
 	Message string `json:"message"`
 	TimeStamp time.Time `json:"@timestamp"`
 	Device string `json:"device"`
@@ -137,17 +140,25 @@ func handleRequest(conn net.Conn, p pool.Pool, token string) {
 		var message = ""
 		var level = "Info"
 		var stackTrace = ""
-		if len(arr) == 1{
+		var arena = ""
+		var battle = ""
+		if len(arr) >= 1{
 			message = decodeString(arr[0])
-		} else if len(arr) == 2{
-			message = decodeString(arr[1])
-			level = arr[0]
-		} else if len(arr) == 3{
-			message = decodeString(arr[1])
-			level = arr[0]
+		} else { continue }
+		if len(arr) >= 2{
+			level = arr[1]
+		}
+		if len(arr) >= 3{
 			stackTrace = decodeString(arr[2])
-		} else {
-			continue
+		}
+		if len(arr) >= 4{
+			stackTrace = decodeString(arr[3])
+		}
+		if len(arr) >= 5{
+			arena = decodeString(arr[4])
+		}
+		if len(arr) >= 6{
+			battle = decodeString(arr[5])
 		}
 
 		if device == "unknown"{
@@ -156,7 +167,9 @@ func handleRequest(conn net.Conn, p pool.Pool, token string) {
 		}
 
 		msg := msg{Token:token, Message:message,
-		TimeStamp:time.Now().UTC(),Level:level, Device:device, StackTrace: stackTrace}
+		TimeStamp:time.Now().UTC(),Level:level,
+		Device:device, StackTrace: stackTrace, Source:"client",
+		ArenaId:arena, BattleId:battle}
 		res, e:= json.Marshal(msg)
 		if e != nil{
 			log.Println(e)
