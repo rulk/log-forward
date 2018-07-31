@@ -102,9 +102,9 @@ mnkPIAou1Z5jJh5VkpTYghdae9C8x49OhgQ=
 }
 type msg struct{
 	Token string `json:"token"`
-	Source string `json:source`
-	ArenaId string `json:arena_id`
-	BattleId string `json:battle_id`
+	Source string `json:"source"`
+	ArenaId string `json:"arena_id"`
+	BattleId string `json:"battle_id"`
 	Message string `json:"message"`
 	TimeStamp time.Time `json:"@timestamp"`
 	Device string `json:"device"`
