@@ -149,16 +149,13 @@ func handleRequest(conn net.Conn, p pool.Pool, token string) {
 			level = arr[1]
 		}
 		if len(arr) >= 3{
-			stackTrace = decodeString(arr[2])
+			stackTrace = arr[2]
 		}
 		if len(arr) >= 4{
-			stackTrace = decodeString(arr[3])
+			arena = decodeString(arr[3])
 		}
 		if len(arr) >= 5{
-			arena = decodeString(arr[4])
-		}
-		if len(arr) >= 6{
-			battle = decodeString(arr[5])
+			battle = decodeString(arr[4])
 		}
 
 		if device == "unknown"{
