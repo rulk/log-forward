@@ -128,11 +128,12 @@ func handleRequest(conn net.Conn, p pool.Pool, token string) {
 	}()
 	log.Println("Starting new connection")
 	reader := bufio.NewReader(conn)
-	device := "unknown"
+
 	for {
 		// Read the incoming connection into the buffer.
 		arrStr, err := reader.ReadString(0)
 		if err != nil{
+			log.Println(err)
 			return
 		}
 		arrStr = strings.Trim(arrStr,"\u0000")
@@ -142,25 +143,25 @@ func handleRequest(conn net.Conn, p pool.Pool, token string) {
 		var stackTrace = ""
 		var arena = ""
 		var battle = ""
-		if len(arr) >= 1{
-			message = decodeString(arr[0])
+		var device = ""
+
+		if len(arr) >=1{
+			device = decodeString(arr[0])
 		} else { continue }
 		if len(arr) >= 2{
-			level = arr[1]
-		}
+			message = decodeString(arr[1])
+		} else { continue }
 		if len(arr) >= 3{
-			stackTrace = arr[2]
+			level = arr[2]
 		}
 		if len(arr) >= 4{
-			arena = decodeString(arr[3])
+			stackTrace = arr[3]
 		}
 		if len(arr) >= 5{
-			battle = decodeString(arr[4])
+			arena = decodeString(arr[4])
 		}
-
-		if device == "unknown"{
-			device = message
-			message = "Device Have Become Active"
+		if len(arr) >= 6{
+			battle = decodeString(arr[5])
 		}
 
 		msg := msg{Token:token, Message:message,
